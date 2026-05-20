@@ -1,0 +1,94 @@
+.virtualized-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.virtual-list-wrapper {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  scroll-behavior: smooth;
+}
+
+.virtual-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.virtualized-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.virtualized-item .house-card,
+.virtualized-item .skeleton-card {
+  width: 100%;
+  max-width: 500px;
+  margin: 0;
+}
+
+.virtual-loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.9);
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.virtual-end-message {
+  text-align: center;
+  padding: 20px;
+  color: #10b981;
+  font-weight: 600;
+  background: rgba(16, 185, 129, 0.1);
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Performance optimizations */
+.virtual-list * {
+  will-change: transform;
+}
+
+/* Custom scrollbar styling */
+.virtual-list::-webkit-scrollbar {
+  width: 12px;
+}
+
+.virtual-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 6px;
+}
+
+.virtual-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 6px;
+}
+
+.virtual-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .virtualized-container {
+    padding: 16px;
+  }
+  
+  .virtualized-item {
+    padding: 8px;
+  }
+  
+  .virtualized-item .house-card,
+  .virtualized-item .skeleton-card {
+    max-width: 100%;
+  }
+  
+  .virtual-list-wrapper {
+    border-radius: 8px;
+  }
+}
