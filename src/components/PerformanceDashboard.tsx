@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { performanceMonitor } from '../utils/performance';
 import { analytics } from '../utils/analytics';
 import './PerformanceDashboard.css';
@@ -25,7 +25,7 @@ const PerformanceDashboard: React.FC = () => {
   const [fpsCounter, setFpsCounter] = useState(0);
   const [lastFrameTime, setLastFrameTime] = useState(performance.now());
 
-  const measureFPS = () => {
+  const measureFPS = useCallback(() => {
     const now = performance.now();
     const delta = now - lastFrameTime;
     const fps = 1000 / delta;
@@ -37,7 +37,7 @@ const PerformanceDashboard: React.FC = () => {
     
     setLastFrameTime(now);
     requestAnimationFrame(measureFPS);
-  };
+  }, [lastFrameTime]);
 
   useEffect(() => {
     const frameId = requestAnimationFrame(measureFPS);
