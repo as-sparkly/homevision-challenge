@@ -105,6 +105,7 @@ export const useInfiniteScroll = (): UseInfiniteScrollState => {
       initializationRef.current = true;
       loadHouses(1, true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Remove loadHouses dependency to prevent infinite re-renders
 
   // Cleanup effect to prevent memory leaks
