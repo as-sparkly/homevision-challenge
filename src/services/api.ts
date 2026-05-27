@@ -17,23 +17,59 @@ export const fetchHouses = async (params: PaginationParams = {}): Promise<House[
     async () => {
       // Single attempt - let user handle retries manually
       try {
-        const response = await fetch(url.toString());
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+        
+        const response = await fetch(url.toString(), {
+          signal: controller.signal,
+        });
+        
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
-          throw new Error(`API returned ${response.status}: ${response.statusText}`);
+          const errorMessage = response.status === 404 
+            ? 'Requested data not found'
+            : response.status >= 500 
+            ? 'Server error occurred, please try again later'
+            : `Network error: ${response.status} ${response.statusText}`;
+          throw new Error(errorMessage);
         }
 
-        const data: ApiResponse = await response.json();
+        let data: ApiResponse;
+        try {
+          data = await response.json();
+        } catch (parseError) {
+          throw new Error('Invalid response format received from server');
+        }
         
         if (!data.ok) {
-          throw new Error('API responded with ok: false');
+          throw new Error('Server responded with an error');
+        }
+
+        if (!Array.isArray(data.houses)) {
+          throw new Error('Invalid data format received');
         }
 
         return data.houses;
       } catch (error) {
-        console.warn(`Request failed:`, error);
-        analytics.trackError(String(error), `fetch-houses-page-${page}`);
-        throw error;
+        let errorMessage = 'Failed to load houses';
+        
+        if (error instanceof Error) {
+          if (error.name === 'AbortError') {
+            errorMessage = 'Request timed out, please try again';
+          } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            errorMessage = 'Network connection failed, please check your internet connection';
+          } else {
+            errorMessage = error.message;
+          }
+        }
+        
+        console.warn(`Request failed for page ${page}:`, error);
+        analytics.trackError(errorMessage, `fetch-houses-page-${page}`);
+        
+        const enhancedError = new Error(errorMessage);
+        enhancedError.cause = error;
+        throw enhancedError;
       }
     }
   );

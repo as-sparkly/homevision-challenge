@@ -2,6 +2,27 @@
 
 A React + TypeScript application that displays an infinite scrolling list of house data with robust error handling for a flaky API.
 
+## 🚀 Live Demo
+
+View the live application: [https://homevision-challenge.vercel.app/](https://homevision-challenge.vercel.app/)
+
+## 💡 Value Proposition
+
+This application solves the challenge of presenting large datasets in a user-friendly, performant way while handling unreliable network conditions. Key benefits include:
+
+### For Users
+- **Seamless Browsing Experience**: No pagination clicks needed - content loads automatically as you scroll
+- **Fast Initial Load**: Only loads what you need to see, reducing wait times
+- **Reliable Performance**: Graceful handling of network issues with clear feedback and easy retry options
+- **Mobile-Optimized**: Responsive design that works perfectly on any device
+- **Accessible Design**: Screen reader friendly with proper semantic markup
+
+### For Developers
+- **Production-Ready Code**: Comprehensive error handling, type safety, and performance optimizations
+- **Scalable Architecture**: Clean separation of concerns with custom hooks and modular components
+- **Maintainable Codebase**: TypeScript throughout with clear interfaces and documentation
+- **Modern Best Practices**: Leverages latest React patterns and browser APIs for optimal performance
+
 ![HomeVision Screenshot](https://via.placeholder.com/800x400/2c5aa0/ffffff?text=HomeVision+House+Listings)
 
 ## Features
@@ -80,6 +101,10 @@ src/
 │   └── api.ts              # House data fetching
 ├── types/               # TypeScript definitions
 │   └── house.ts            # Data interfaces
+├── utils/               # Utility functions
+│   ├── analytics.ts        # Analytics tracking
+│   ├── constants.ts        # App configuration
+│   └── performance.ts      # Performance monitoring
 └── App.tsx             # Main application component
 ```
 

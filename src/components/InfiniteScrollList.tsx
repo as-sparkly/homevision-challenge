@@ -8,8 +8,9 @@ import { PERFORMANCE_CONFIG } from '../utils/constants';
 import './InfiniteScrollList.css';
 
 const InfiniteScrollList: React.FC = () => {
-  const { houses, loading, error, hasMore, loadMore, retry } = useInfiniteScroll();
+  const { houses, loading, error, errorType, hasMore, loadMore, retry } = useInfiniteScroll();
   const observerRef = useRef<HTMLDivElement>(null);
+
 
   const handleIntersection = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -33,29 +34,20 @@ const InfiniteScrollList: React.FC = () => {
     return () => observer.disconnect();
   }, [handleIntersection]);
 
-  // Show skeleton cards during initial loading
-  if (loading && houses.length === 0) {
-    return (
-      <div className="list-container">
+  return (
+    <div className="list-container">
+      {loading && houses.length === 0 && (
         <div className="houses-grid">
           {Array.from({ length: 6 }, (_, index) => (
             <SkeletonCard key={`skeleton-${index}`} />
           ))}
         </div>
-      </div>
-    );
-  }
+      )}
 
-  if (error && houses.length === 0) {
-    return (
-      <div className="list-container">
-        <ErrorMessage message={error} onRetry={retry} />
-      </div>
-    );
-  }
+      {error && houses.length === 0 && (
+        <ErrorMessage message={error} onRetry={retry} errorType={errorType || 'general'} />
+      )}
 
-  return (
-    <div className="list-container">
       <div className="houses-grid">
         {houses.map((house) => (
           <HouseCard key={house.id} house={house} />
@@ -63,7 +55,7 @@ const InfiniteScrollList: React.FC = () => {
       </div>
 
       {error && houses.length > 0 && (
-        <ErrorMessage message={error} onRetry={retry} />
+        <ErrorMessage message={error} onRetry={retry} errorType={errorType || 'general'} />
       )}
 
       {loading && houses.length > 0 && <LoadingSpinner />}
